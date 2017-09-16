@@ -6,15 +6,23 @@ var fs = require('fs');
 var url = require('url');
 
 
-function fsRequest(url) {
-  return fs.readFile('/Users/student/code/hrsf82-web-historian/archives/sites/' + url, function(err, data) {
-    if (err) {
-      return false;
-    } else {
-      return true;
-    }
-  });
-}
+
+// or 
+
+// if (path.existsSync('foo.txt')) { 
+//   // do something 
+// } 
+
+
+// function fsRequest(url) {
+//   return fs.readFile('/Users/student/code/hrsf82-web-historian/archives/sites/' + url, function(err, data) {
+//     if (err) {
+//       return false;
+//     } else {
+//       return true;
+//     }
+//   });
+// }
 
 exports.handleRequest = function (req, res) {
   if ( req.method === 'POST' ) {
@@ -25,13 +33,8 @@ exports.handleRequest = function (req, res) {
       data += chunk;
     }).on('end', function() {
       data = data.split('=')[1];
-      if (fsRequest(data)) {
-        console.log('We win!');
-      } else {
-        console.log('ERROR!');
-      }
+      archive.isUrlArchived(data);
     });
-    // later refactor to conditional
     fs.createReadStream(__dirname + '/public/loading.html').pipe(res);
   } else {
 

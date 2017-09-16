@@ -25,6 +25,10 @@ exports.initialize = function(pathsObj) {
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
+  // find file that has urls
+  // look through that url file
+  // if file exists, pass that in callback
+
 exports.readListOfUrls = function(callback) {
 };
 
@@ -32,9 +36,23 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callback) {
+  fs.open('/Users/student/code/hrsf82-web-historian/archives/sites/' + url, 'w', function() {
+  });
 };
 
 exports.isUrlArchived = function(url, callback) {
+  fs.access('/Users/student/code/hrsf82-web-historian/archives/sites/' + url, function(err) {
+    if (err) {
+      console.log('ERROR:', err);
+      exports.addUrlToList(url);
+    } else {
+      console.log('ACCESSED');
+    }
+  });
+};
+
+exports.addUrlToArchive = function(url) {
+
 };
 
 exports.downloadUrls = function(urls) {
