@@ -46,7 +46,7 @@ exports.isUrlArchived = function(url, callback) {
       console.log('ERROR:', err);
       exports.addUrlToList(url);
     } else {
-      console.log('ACCESSED');
+      console.log('ACCESSED')
     }
   });
 };

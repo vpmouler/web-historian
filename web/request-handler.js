@@ -6,23 +6,10 @@ var fs = require('fs');
 var url = require('url');
 
 
-
-// or 
-
-// if (path.existsSync('foo.txt')) { 
-//   // do something 
-// } 
-
-
-// function fsRequest(url) {
-//   return fs.readFile('/Users/student/code/hrsf82-web-historian/archives/sites/' + url, function(err, data) {
-//     if (err) {
-//       return false;
-//     } else {
-//       return true;
-//     }
-//   });
-// }
+var addUrlToList = function(url, callback) {
+  fs.open('/Users/student/code/hrsf82-web-historian/archives/sites/' + url, 'w', function() {
+  });
+};
 
 exports.handleRequest = function (req, res) {
   if ( req.method === 'POST' ) {
@@ -33,9 +20,30 @@ exports.handleRequest = function (req, res) {
       data += chunk;
     }).on('end', function() {
       data = data.split('=')[1];
-      archive.isUrlArchived(data);
+      fs.access('/Users/student/code/hrsf82-web-historian/archives/sites/' + data, function(err) {
+        if (err) {
+          console.log('ERROR:', err);
+          addUrlToList(data);
+          fs.appendFile('/Users/student/code/hrsf82-web-historian/archives/sites.txt', data + '+', function(err) {
+            if (err) {
+              console.log('error inside appendFile');
+            } else {
+              console.log('File Appended');
+            }
+          });
+          fs.createReadStream(__dirname + '/public/loading.html').pipe(res);
+        } else {
+          console.log('ACCESSED');
+          // if file exists, pipe through the html to client
+          fs.createReadStream('/Users/student/code/hrsf82-web-historian/archives/sites/' + data).pipe(res);
+          
+        }
+      });
+
+
+      
     });
-    fs.createReadStream(__dirname + '/public/loading.html').pipe(res);
+    
   } else {
 
     // if file path doesnt exist, then send to loading
