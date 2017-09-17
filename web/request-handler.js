@@ -35,6 +35,7 @@ exports.handleRequest = function (req, res) {
         } else {
           console.log('ACCESSED');
           // if file exists, pipe through the html to client
+          console.log('data', data);
           fs.createReadStream('/Users/student/code/hrsf82-web-historian/archives/sites/' + data).pipe(res);
           
         }
